@@ -1,0 +1,8 @@
+{
+  "dummyTest": {
+    "valid": {
+      "userName": "admin",
+      "password": "12345"
+    }
+  }
+}

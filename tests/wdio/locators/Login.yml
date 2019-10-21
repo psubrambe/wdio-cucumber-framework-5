@@ -1,0 +1,5 @@
+
+userName_txtbox: '//input[@id="usr"]',
+password_txtbox: '//input[@id="pwd"]',
+continue_btn: '//input[@value="Login"]',
+back : '//*[text()="GO BACK"]'

@@ -1,0 +1,9 @@
+node_modules
+.idea
+src/.idea
+.DS_Store
+npm-debug.log
+*.png
+tests/wdio/utility/ocrLog/ocrLogger.json
+tests/wdio/report/
+package-lock.json

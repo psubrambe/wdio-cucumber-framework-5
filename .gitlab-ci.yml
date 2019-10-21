@@ -1,0 +1,22 @@
+stages:
+  - Lint Checker
+  - Create XRay Ticket
+
+lintChecker:
+  before_script:
+    - npm i gherkin-lint --g
+    - npm i eslint --g
+    - npm i yaml-lint --g
+  stage: Lint Checker
+  script:
+    - npm run lint
+
+createXRayTicket:
+  stage: Create XRay Ticket
+  only:
+    - master
+  script:
+    - cd tests/wdio/features/e2e/desktop/bronze
+    - zip -R features.zip '*.feature'
+    - 'curl -H "Content-Type: multipart/form-data" -u $jiraUserName:$jiraPassword -F "file=@features.zip" "https://jira.devops.lloydsbanking.com/rest/raven/1.0/import/feature?projectKey=$jiraProjectKey"'
+    - rm features.zip
