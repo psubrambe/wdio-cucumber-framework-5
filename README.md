@@ -1,5 +1,5 @@
 
-This repository contains automated integration tests for LBG's web apps.  
+This repository contains automated integration tests web apps.  
   
 The tests are run against different browsers (either through selenium or zalenium).  
   
