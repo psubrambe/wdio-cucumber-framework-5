@@ -9,7 +9,7 @@ The tests are run against different browsers (either through selenium or zaleniu
 * [Node.js](https://nodejs.org/) == 10.15.0  
 * Java 8 or higher    
 * Webstorm (or whatever IDE you're comfortable with).  
-* This project is routinely tested on Lloyds Windows Machines, so instructions for installing  
+* This project is routinely tested on so instructions for installing  
   on these machines are as below.  
   
 ## *Setup*  
@@ -80,4 +80,4 @@ The following technologies form the core of the framework:
   
 *License*  
 ----  
-QE
+MIT
