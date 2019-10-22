@@ -3,16 +3,9 @@ const cucumberJson = require('wdio-cucumberjs-json-reporter').default;
 const {generate} = require('multiple-cucumber-html-reporter');
 const {removeSync} = require('fs-extra');
 
-const reportportal = require('wdio-reportportal-reporter');
-const RpService = require('wdio-reportportal-service');
-
-let RpConfig = require('./reportPortal.config');
 let importFunction = require('./import');
-let sauceConfig = require('./sauce.config');
 
 let featureFilePath;
-let bailCount;
-let fastFail;
 
 let argv = require('yargs')
     .usage('Usage: gulp cucumber --[options]')
@@ -138,54 +131,6 @@ function getCapabilities() {
             }
         };
         capabilitiesArray.push(returnObj);
-    } else if (argv.runner === 'sauce') {
-        let devices = sauceConfig.deviceList();
-        devices.forEach(value => {
-            let returnObject = {
-                'cjson:metadata': {
-                    browser: {},
-                    platform: {}
-                }
-            };
-            let deviceName,
-                deviceType;
-            if (value['platformName'].toString().includes('Windows')) {
-                deviceName = 'Windows';
-                deviceType = 'Windows';
-            }
-            if (value['platformName'].toString().includes('macOS')) {
-                deviceName = 'Mac OS';
-                deviceType = 'osx';
-            }
-            if (value['platformName'].toString().includes('Linux')) {
-                deviceName = 'Linux';
-                deviceType = 'linux';
-            }
-            if (value['browserName'] === 'chrome') {
-                returnObject['proxy'] = {
-                    proxyType: 'pac',
-                    proxyAutoconfigUrl: 'http://127.0.0.1:19876/pac.js',
-                    noProxy: 'localhost,127.0.0.1'
-                };
-                returnObject['platform'] = value['platformName'];
-                returnObject['version'] = value['browserVersion'];
-            }
-            if (value['browserName'] !== 'chrome') {
-                returnObject['sauce:options'] = {
-                    seleniumVersion: '3.11.0'
-
-                };
-                returnObject['platformName'] = value['platformName'];
-                returnObject['browserVersion'] = value['browserVersion'];
-            }
-            returnObject['browserName'] = value['browserName'];
-            returnObject['cjson:metadata'].browser.name = value['browserName'];
-            returnObject['cjson:metadata'].browser.version = value['browserVersion'];
-            returnObject['cjson:metadata'].device = deviceName;
-            returnObject['cjson:metadata'].platform.name = deviceType;
-            returnObject['cjson:metadata'].platform.version = value['platformName'].toString().match(/\d+/);
-            capabilitiesArray.push(returnObject);
-        });
     } else {
         let returnObject = {
             browserName: argv.browser,
@@ -204,23 +149,6 @@ function getCapabilities() {
         capabilitiesArray.push(returnObject);
     }
     return capabilitiesArray;
-}
-
-function getPortalConfig() {
-    if (argv.jobDetails) {
-        RpConfig.reportPortalClientConfig.launch = 'Jenkins-' + argv.jobDetails;
-    } else {
-        RpConfig.reportPortalClientConfig.launch = 'Local-' + os.userInfo().username;
-    }
-    return RpConfig;
-}
-
-if (argv.failBuildOnFirstFailure === true) {
-    bailCount = 1;
-    fastFail = true;
-} else {
-    bailCount = 0;
-    fastFail = false;
 }
 
 let config = {
@@ -324,7 +252,7 @@ let config = {
     //
     // If you only want to run your tests until a specific amount of tests have failed use
     // bail (default is 0 - don't bail, run all tests).
-    bail: bailCount,
+    // bail: bailCount,
     //
     // Set a base URL in order to shorten url command calls. If your `url` parameter starts
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
@@ -368,7 +296,7 @@ let config = {
         backtrace: false,   // <boolean> show full backtrace for errors
         requireModule: [],  // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
         dryRun: false,      // <boolean> invoke formatters without executing steps
-        failFast: fastFail,    // <boolean> abort the run on first failure
+        //failFast: fastFail,    // <boolean> abort the run on first failure
         format: ['pretty'], // <string[]> (type[:path]) specify the output format, optionally supply PATH to redirect formatter output (repeatable)
         colors: true,       // <boolean> disable colors in formatter output
         snippets: true,     // <boolean> hide step definition snippets for pending steps
